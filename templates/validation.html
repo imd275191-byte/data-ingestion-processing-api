@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dataset Validation</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =========================================================
+           FORCE VALIDATION PAGE THEME
+        ========================================================= */
+
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100% !important;
+        }
+
+        body {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+            transition:
+                background 0.25s ease,
+                color 0.25s ease;
+        }
+
+        /* =========================================================
+           MAIN PAGE
+        ========================================================= */
+
+        .validation-page {
+            width: 100%;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 35px 20px 60px;
+            box-sizing: border-box;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .validation-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .validation-header h1 {
+            margin: 0;
+            color: #f8fafc !important;
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .validation-header p {
+            margin: 10px 0 0;
+            color: #94a3b8 !important;
+            font-size: 16px;
+        }
+
+        .theme-control {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .theme-button {
+            border: 1px solid #334155 !important;
+            border-radius: 10px !important;
+            padding: 10px 18px !important;
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .theme-button:hover {
+            background: #334155 !important;
+            transform: translateY(-2px);
+        }
+
+        /* =========================================================
+           DATASET INFORMATION
+        ========================================================= */
+
+        .dataset-info-card {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border: 1px solid #334155 !important;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .dataset-info-card h2 {
+            margin: 0 0 14px;
+            color: #f8fafc !important;
+            font-size: 20px;
+        }
+
+        .dataset-name {
+            color: #e2e8f0 !important;
+            font-size: 17px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .dataset-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .dataset-meta span {
+            background: #273449 !important;
+            color: #cbd5e1 !important;
+            border: 1px solid #3b4a61 !important;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           STATUS BANNER
+        ========================================================= */
+
+        .validation-status-banner {
+            border-radius: 16px;
+            padding: 28px 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid;
+        }
+
+        .validation-status-banner.success {
+            background: #123524 !important;
+            border-color: #22c55e !important;
+            color: #dcfce7 !important;
+        }
+
+        .validation-status-banner.warning {
+            background: #451f05 !important;
+            border-color: #f59e0b !important;
+            color: #fef3c7 !important;
+        }
+
+        .validation-status-banner.failed {
+            background: #450a0a !important;
+            border-color: #ef4444 !important;
+            color: #fee2e2 !important;
+        }
+
+        .status-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .validation-status-banner h2 {
+            margin: 0;
+            font-size: 24px;
+            color: inherit !important;
+        }
+
+        .validation-status-banner p {
+            margin: 9px 0 0;
+            color: inherit !important;
+            opacity: 0.9;
+        }
+
+        /* =========================================================
+           SECTION TITLE
+        ========================================================= */
+
+        .section-title {
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            color: #f8fafc !important;
+            font-size: 23px;
+        }
+
+        .section-title p {
+            margin: 5px 0 0;
+            color: #94a3b8 !important;
+        }
+
+        /* =========================================================
+           SUMMARY CARDS
+        ========================================================= */
+
+        .validation-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .validation-stat {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border: 1px solid #334155 !important;
+            border-radius: 14px;
+            padding: 22px 18px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+            transition: all 0.2s ease;
+        }
+
+        .validation-stat:hover {
+            transform: translateY(-3px);
+            border-color: #475569 !important;
+        }
+
+        .validation-stat-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .validation-stat strong {
+            display: block;
+            color: #f8fafc !important;
+            font-size: 27px;
+            line-height: 1;
+        }
+
+        .validation-stat small {
+            display: block;
+            margin-top: 9px;
+            color: #94a3b8 !important;
+        }
+
+        /* =========================================================
+           GENERAL CARD
+        ========================================================= */
+
+        .validation-card {
+            background: #1e293b !important;
+            color: #e2e8f0 !important;
+            border: 1px solid #334155 !important;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
+        }
+
+        /* =========================================================
+           ISSUE BOXES
+        ========================================================= */
+
+        .issue-box {
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-top: 15px;
+        }
+
+        .issue-box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .issue-box p {
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: #3b2508 !important;
+            color: #fde68a !important;
+            border: 1px solid #a16207 !important;
+        }
+
+        .warning-box h3,
+        .warning-box p,
+        .warning-box strong {
+            color: #fde68a !important;
+        }
+
+        .error-box {
+            background: #450a0a !important;
+            color: #fecaca !important;
+            border: 1px solid #b91c1c !important;
+        }
+
+        .success-box {
+            background: #123524 !important;
+            color: #bbf7d0 !important;
+            border: 1px solid #15803d !important;
+        }
+
+        .success-box h3,
+        .success-box p {
+            color: #bbf7d0 !important;
+        }
+
+        /* =========================================================
+           EMPTY COLUMN LIST
+        ========================================================= */
+
+        .empty-column-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .empty-column-item {
+            display: inline-block;
+            background: #451a03 !important;
+            color: #fcd34d !important;
+            border: 1px solid #92400e !important;
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #334155 !important;
+        }
+
+        .validation-table,
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+            background: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        .validation-table th,
+        .validation-table td,
+        .preview-table th,
+        .preview-table td {
+            padding: 13px 14px;
+            text-align: left;
+            border-bottom: 1px solid #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        .validation-table th,
+        .preview-table th {
+            background: #273449 !important;
+            color: #f8fafc !important;
+            font-weight: 600;
+        }
+
+        .validation-table tr:hover td,
+        .preview-table tr:hover td {
+            background: #253247 !important;
+        }
+
+        /* =========================================================
+           STATUS BADGES
+        ========================================================= */
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-valid {
+            background: #123524 !important;
+            color: #86efac !important;
+            border: 1px solid #15803d !important;
+        }
+
+        .status-warning {
+            background: #451f05 !important;
+            color: #fcd34d !important;
+            border: 1px solid #a16207 !important;
+        }
+
+        .status-info {
+            background: #172554 !important;
+            color: #93c5fd !important;
+            border: 1px solid #1d4ed8 !important;
+        }
+
+        /* =========================================================
+           ACTION BUTTONS
+        ========================================================= */
+
+        .validation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .validation-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 11px 17px !important;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .validation-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: #2563eb !important;
+            color: #ffffff !important;
+        }
+
+        .button-success {
+            background: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        .button-secondary {
+            background: #475569 !important;
+            color: #ffffff !important;
+        }
+
+        .button-download {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+        }
+
+        /* =========================================================
+           LIGHT MODE
+        ========================================================= */
+
+        body.light-validation {
+            background: #f1f5f9 !important;
+            color: #172033 !important;
+        }
+
+        body.light-validation .validation-header h1 {
+            color: #172033 !important;
+        }
+
+        body.light-validation .validation-header p {
+            color: #64748b !important;
+        }
+
+        body.light-validation .theme-button {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body.light-validation .theme-button:hover {
+            background: #f8fafc !important;
+        }
+
+        body.light-validation .dataset-info-card,
+        body.light-validation .validation-stat,
+        body.light-validation .validation-card {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        body.light-validation .dataset-info-card h2,
+        body.light-validation .section-title h2 {
+            color: #172033 !important;
+        }
+
+        body.light-validation .dataset-name {
+            color: #334155 !important;
+        }
+
+        body.light-validation .dataset-meta span {
+            background: #f8fafc !important;
+            color: #475569 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-validation .validation-stat strong {
+            color: #172033 !important;
+        }
+
+        body.light-validation .validation-stat small,
+        body.light-validation .section-title p {
+            color: #64748b !important;
+        }
+
+        body.light-validation .table-wrapper {
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-validation .validation-table,
+        body.light-validation .preview-table {
+            background: #ffffff !important;
+            color: #172033 !important;
+        }
+
+        body.light-validation .validation-table th,
+        body.light-validation .preview-table th {
+            background: #f8fafc !important;
+            color: #172033 !important;
+        }
+
+        body.light-validation .validation-table td,
+        body.light-validation .preview-table td {
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-validation .validation-table tr:hover td,
+        body.light-validation .preview-table tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .validation-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .validation-page {
+                padding: 25px 12px 45px;
+            }
+
+            .validation-header h1 {
+                font-size: 27px;
+            }
+
+            .validation-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .validation-card,
+            .dataset-info-card {
+                padding: 18px;
+            }
+
+            .validation-actions {
+                flex-direction: column;
+            }
+
+            .validation-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="validation-page">
+
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header class="validation-header">
+
+        <h1>
+            🔎 Dataset Validation
+        </h1>
+
+        <p>
+            Check dataset quality and consistency
+        </p>
+
+        <div class="theme-control">
+
+            <button
+                type="button"
+                id="themeButton"
+                class="theme-button"
+                onclick="toggleValidationTheme()">
+                ☀️ Light
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         DATASET INFORMATION
+    ========================================================== -->
+
+    <section class="dataset-info-card">
+
+        <h2>
+            📄 Dataset Information
+        </h2>
+
+        <div class="dataset-name">
+            {{ dataset.filename }}
+        </div>
+
+        <div class="dataset-meta">
+
+            <span>
+                Type:
+                {{ dataset.file_type or dataset.filetype or "Unknown" }}
+            </span>
+
+            <span>
+                Size:
+                {{ dataset.file_size or dataset.filesize or 0 }}
+                bytes
+            </span>
+
+            <span>
+                Dataset ID:
+                {{ dataset.id }}
+            </span>
+
+            <span>
+                Status:
+                {{ dataset.status or "Uploaded" }}
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         OVERALL STATUS
+    ========================================================== -->
+
+    {% set current_status =
+        validation_status or
+        details.status or
+        "WARNING"
+    %}
+
+
+    {% if current_status|upper in
+          ["VALID", "SUCCESS", "PASSED", "GOOD"] %}
+
+        <section class="validation-status-banner success">
+
+            <div class="status-icon">
+                ✅
+            </div>
+
+            <h2>
+                Dataset Validation Successful
+            </h2>
+
+            <p>
+                No major data quality problems were detected.
+            </p>
+
+        </section>
+
+
+    {% elif current_status|upper in
+            ["FAILED", "ERROR"] %}
+
+        <section class="validation-status-banner failed">
+
+            <div class="status-icon">
+                ❌
+            </div>
+
+            <h2>
+                Dataset Validation Failed
+            </h2>
+
+            <p>
+                Serious data quality problems were detected.
+                Please review the validation details below.
+            </p>
+
+        </section>
+
+
+    {% else %}
+
+        <section class="validation-status-banner warning">
+
+            <div class="status-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Dataset Needs Attention
+            </h2>
+
+            <p>
+                Some data quality issues were found.
+                Please review the validation details below.
+            </p>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- =========================================================
+         VALIDATION SUMMARY
+    ========================================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            Validation Summary
+        </h2>
+
+        <p>
+            Overall dataset quality
+        </p>
+
+    </div>
+
+
+    <section class="validation-stats">
+
+
+        <!-- TOTAL ROWS -->
+
+        <div class="validation-stat">
+
+            <div class="validation-stat-icon">
+                📊
+            </div>
+
+            <strong>
+                {{ total_rows }}
+            </strong>
+
+            <small>
+                Total Rows
+            </small>
+
+        </div>
+
+
+        <!-- TOTAL COLUMNS -->
+
+        <div class="validation-stat">
+
+            <div class="validation-stat-icon">
+                📋
+            </div>
+
+            <strong>
+                {{ total_columns }}
+            </strong>
+
+            <small>
+                Total Columns
+            </small>
+
+        </div>
+
+
+        <!-- MISSING VALUES -->
+
+        <div class="validation-stat">
+
+            <div class="validation-stat-icon">
+                ⚠️
+            </div>
+
+            <strong>
+                {{ total_missing_values }}
+            </strong>
+
+            <small>
+                Missing Values
+            </small>
+
+        </div>
+
+
+        <!-- DUPLICATES -->
+
+        <div class="validation-stat">
+
+            <div class="validation-stat-icon">
+                🔁
+            </div>
+
+            <strong>
+                {{ duplicate_rows }}
+            </strong>
+
+            <small>
+                Duplicate Rows
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         DATA QUALITY DETAILS
+    ========================================================== -->
+
+    <section class="validation-card">
+
+        <div class="section-title">
+
+            <h2>
+                🔍 Data Quality Details
+            </h2>
+
+            <p>
+                Issues detected during dataset validation
+            </p>
+
+        </div>
+
+
+        <!-- MISSING VALUES -->
+
+        {% if total_missing_values > 0 %}
+
+            <div class="issue-box warning-box">
+
+                <h3>
+                    ⚠️ Missing Values Found
+                </h3>
+
+                <p>
+                    Total missing values:
+                    <strong>
+                        {{ total_missing_values }}
+                    </strong>
+                </p>
+
+                <p>
+                    Missing values are not automatically filled.
+                    They remain available for review so that
+                    incorrect assumptions are not introduced
+                    into the dataset.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- DUPLICATES -->
+
+        {% if duplicate_rows > 0 %}
+
+            <div class="issue-box warning-box">
+
+                <h3>
+                    🔁 Duplicate Rows Found
+                </h3>
+
+                <p>
+                    Duplicate rows:
+                    <strong>
+                        {{ duplicate_rows }}
+                    </strong>
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- EMPTY COLUMNS -->
+
+        {% if empty_columns %}
+
+            <div class="issue-box warning-box">
+
+                <h3>
+                    📭 Empty Columns
+                </h3>
+
+                <div class="empty-column-list">
+
+                    {% for column in empty_columns %}
+
+                        <span class="empty-column-item">
+                            {{ column }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- NO ISSUES -->
+
+        {% if total_missing_values == 0
+              and duplicate_rows == 0
+              and not empty_columns %}
+
+            <div class="issue-box success-box">
+
+                <h3>
+                    ✅ No Data Quality Issues
+                </h3>
+
+                <p>
+                    The dataset passed the available
+                    validation checks.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================================================
+         COLUMN VALIDATION
+    ========================================================== -->
+
+    {% if column_validation %}
+
+    <section class="validation-card">
+
+        <div class="section-title">
+
+            <h2>
+                📋 Column Validation
+            </h2>
+
+            <p>
+                Missing and duplicate values for each column
+            </p>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="validation-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Column
+                        </th>
+
+                        <th>
+                            Missing Values
+                        </th>
+
+                        <th>
+                            Duplicate Values
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for column in column_validation %}
+
+                    <tr>
+
+                        <td>
+                            {{ column.name or column.column }}
+                        </td>
+
+                        <td>
+
+                            {% if column.missing_values is defined %}
+
+                                {{ column.missing_values }}
+
+                            {% elif column.missing is defined %}
+
+                                {{ column.missing }}
+
+                            {% else %}
+
+                                0
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if column.duplicate_values is defined %}
+
+                                {{ column.duplicate_values }}
+
+                            {% elif column.duplicates is defined %}
+
+                                {{ column.duplicates }}
+
+                            {% elif column.duplicate is defined %}
+
+                                {{ column.duplicate }}
+
+                            {% else %}
+
+                                0
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if column.status|upper in
+                                  ["VALID", "SUCCESS", "OK"] %}
+
+                                <span class="status-badge status-valid">
+                                    ✅ Valid
+                                </span>
+
+                            {% elif column.status|upper
+                                  in ["WARNING", "WARN"] %}
+
+                                <span class="status-badge status-warning">
+                                    ⚠️ Warning
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge status-info">
+                                    ℹ️ {{ column.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =========================================================
+         DATA PREVIEW
+    ========================================================== -->
+
+    {% if data_preview %}
+
+    <section class="validation-card">
+
+        <div class="section-title">
+
+            <h2>
+                👀 Dataset Preview
+            </h2>
+
+            <p>
+                First available records from the
+                validated dataset
+            </p>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="preview-table">
+
+                <thead>
+
+                    <tr>
+
+                        {% for column in data_preview[0].keys() %}
+
+                            <th>
+                                {{ column }}
+                            </th>
+
+                        {% endfor %}
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for row in data_preview %}
+
+                    <tr>
+
+                        {% for column in data_preview[0].keys() %}
+
+                            <td>
+                                {{ row.get(column, "") }}
+                            </td>
+
+                        {% endfor %}
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =========================================================
+         ACTION BUTTONS
+    ========================================================== -->
+
+    <div class="validation-actions">
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="validation-button button-secondary">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+        {% if dataset.id %}
+
+        <a
+            href="{{ url_for('clean_dataset',
+                             dataset_id=dataset.id) }}"
+            class="validation-button button-success">
+
+            🧹 Clean Dataset
+
+        </a>
+
+        {% endif %}
+
+
+        {% if dataset.id %}
+
+        <a
+            href="{{ url_for('profile_dataset',
+                             dataset_id=dataset.id) }}"
+            class="validation-button button-primary">
+
+            📊 View Profile
+
+        </a>
+
+        {% endif %}
+
+
+        {% if details and details.cleaned_filename %}
+
+        <a
+            href="{{ url_for('download',
+                             filename=details.cleaned_filename) }}"
+            class="validation-button button-download">
+
+            ⬇ Download Cleaned File
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+
+<!-- =============================================================
+     THEME JAVASCRIPT
+============================================================= -->
+
+<script>
+
+    function applyValidationTheme() {
+
+        const savedTheme =
+            localStorage.getItem("validationTheme");
+
+        const button =
+            document.getElementById("themeButton");
+
+
+        /*
+         * DEFAULT = DARK
+         */
+
+        if (savedTheme === "light") {
+
+            document.body.classList.add(
+                "light-validation"
+            );
+
+            if (button) {
+                button.textContent = "🌙 Dark";
+            }
+
+        } else {
+
+            document.body.classList.remove(
+                "light-validation"
+            );
+
+            if (button) {
+                button.textContent = "☀️ Light";
+            }
+
+        }
+
+    }
+
+
+    function toggleValidationTheme() {
+
+        const isLight =
+            document.body.classList.contains(
+                "light-validation"
+            );
+
+
+        if (isLight) {
+
+            localStorage.setItem(
+                "validationTheme",
+                "dark"
+            );
+
+        } else {
+
+            localStorage.setItem(
+                "validationTheme",
+                "light"
+            );
+
+        }
+
+
+        applyValidationTheme();
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            applyValidationTheme();
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>

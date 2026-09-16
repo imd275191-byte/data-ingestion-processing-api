@@ -1,0 +1,55 @@
+S.No.,Group No.,NAME OF GROUP MEMBERS,UNIVERSITY ROLL NO.,Name of the Supervisor,Project Title,Data_Quality_Status
+1,G-1,Aryan Kumar Singh,2501320140035,Dr. Sureshwati,"Green AI: An Extensive Analysis of Measures, Instruments, Difficulties, Patterns, and Prospects for the Future",OK
+2,G-1,Devashish Raj,2501320140051,Dr. Sureshwati,"Green AI: An Extensive Analysis of Measures, Instruments, Difficulties, Patterns, and Prospects for the Future",OK
+3,G-1,Ankit Kumar,2501320140026,Dr. Sureshwati,"Green AI: An Extensive Analysis of Measures, Instruments, Difficulties, Patterns, and Prospects for the Future",OK
+4,G-2,Aditya kumar Gupta,2501320140009,Dr. Saumya Chaturvedi,AI POWERED JOB PORTAL,OK
+5,G-2,Devang Pal,2501320140050,Dr. Saumya Chaturvedi,AI POWERED JOB PORTAL,OK
+6,G-2,Anshul kumar,2501320140030,Dr. Saumya Chaturvedi,AI POWERED JOB PORTAL,OK
+7,G-3,Avanish maurya,2501320140040,Dr. Shweta Rai,"""RFID-Based Authentication and AI-Powered Slot Detection in a Smart Car Parking System""",OK
+8,G-3,,2501320140002,Dr. Shweta Rai,"""RFID-Based Authentication and AI-Powered Slot Detection in a Smart Car Parking System""",WARNING
+9,G-3,,2501320140003,Dr. Shweta Rai,"""RFID-Based Authentication and AI-Powered Slot Detection in a Smart Car Parking System""",WARNING
+10,G-4,Aditya Kumar,2501320140008,Dr. Amit Bhati,Web-based e-commerce platform with chatbot integration,OK
+11,G-4,Avinash Jha,,Dr. Amit Bhati,Web-based e-commerce platform with chatbot integration,WARNING
+12,G-4,Abhishek Kumar,2501320140006,Dr. Amit Bhati,Web-based e-commerce platform with chatbot integration,OK
+13,G-5,ARNAV VERMA,2501320140033,Dr. Neelaksh Sheel,"AI is a contemporary application of general evolution in human-machine interaction through human collaboration in ""Second Brain"" technology.",OK
+14,G-5,ANSH AGARWAL,2501320140029,Dr. Neelaksh Sheel,"AI is a contemporary application of general evolution in human-machine interaction through human collaboration in ""Second Brain"" technology.",OK
+15,G-5,ARUSH GUPTA,2501320140034,Dr. Neelaksh Sheel,"AI is a contemporary application of general evolution in human-machine interaction through human collaboration in ""Second Brain"" technology.",OK
+17,G-6,ABHISHEK,2501320140005,Dr. Ansul Kumar,Fake Profile Identification in Social Network using Machine Learning and NLP,OK
+18,G-6,ADARSH PANDEY,2501320140007,Dr. Ansul Kumar,Fake Profile Identification in Social Network using Machine Learning and NLP,OK
+19,G-6,AKASH SINGH CHAUHAN,2501320140010,Dr. Ansul Kumar,Fake Profile Identification in Social Network using Machine Learning and NLP,OK
+20,G-7,AKHILESH YADAV,2501320140011,Dr. Abdul Alim,Fighting Money Laundering With Statistics and Machine Learning,OK
+21,G-7,ALKA GUPTA,2501320140012,Dr. Abdul Alim,Fighting Money Laundering With Statistics and Machine Learning,OK
+22,G-7,ALOK SRIVASTAV,2501320140013,Dr. Abdul Alim,Fighting Money Laundering With Statistics and Machine Learning,OK
+23,G-8,AMAN KUMAR,2501320140014,Ms. Namita Sharma,BlockChain Based Federated Learning With SMPC Model Verification Against Poisoning Attack,OK
+24,G-8,AMAN RAJ,2501320140016,Ms. Namita Sharma,BlockChain Based Federated Learning With SMPC Model Verification Against Poisoning Attack,OK
+25,G-8,AMAN SRIVASTAV,2501320140017,Ms. Namita Sharma,BlockChain Based Federated Learning With SMPC Model Verification Against Poisoning Attack,OK
+26,G-9,AMAR KUMAR,2501320140018,Mr. Aditya Kumar,Creating Alert Messages Based On Wild Animal Activity Detection Using Hybrid Deep Neural Networks,OK
+27,G-9,AMIT RAJ,2501320140019,Mr. Aditya Kumar,Creating Alert Messages Based On Wild Animal Activity Detection Using Hybrid Deep Neural Networks,OK
+28,G-9,ANIKET SINGH,2501320140020,Mr. Aditya Kumar,Creating Alert Messages Based On Wild Animal Activity Detection Using Hybrid Deep Neural Networks,OK
+29,G-10,ANIKET SINGH,2501320140021,Ms. Poonam Verma,Two Stage Job Title Identification System For Online Job Advertisements,OK
+30,G-10,ANIKET SINHA,2501320140022,Ms. Poonam Verma,Two Stage Job Title Identification System For Online Job Advertisements,OK
+31,G-10,ANJALI,2501320140023,Ms. Poonam Verma,Two Stage Job Title Identification System For Online Job Advertisements,OK
+32,G-12,ANJALI SINGH,2501320140024,Mr. Harendra Singh,Deep Learning Anti-Fraud Model for Internet Loan Where We Are Going,OK
+33,G-12,ANKITA KUMARI,2501320140027,Mr. Harendra Singh,Deep Learning Anti-Fraud Model for Internet Loan Where We Are Going,OK
+34,G-12,ANMOL CHAUBEY,2501320140028,Mr. Harendra Singh,Deep Learning Anti-Fraud Model for Internet Loan Where We Are Going,OK
+35,G-13,ANUBHAV SINGH,2501320140031,Ms. Arti Attri,Suicidal Ideation Detection: A Review of Machine Learning Methods and Applications,OK
+36,G-13,ANURAG SINGH,2501320140032,Ms. Arti Attri,Suicidal Ideation Detection: A Review of Machine Learning Methods and Applications,OK
+37,G-13,ARYAN KUMAR SONI,2501320140036,Ms. Arti Attri,Suicidal Ideation Detection: A Review of Machine Learning Methods and Applications,OK
+38,G-14,ASHOK,2501320140037,Ms. Anjali Malik,Membership Inference Attack and Defense for Wireless Signal Classifiers with Deep Learning,OK
+39,G-14,ASMIT KUMAR KUSHWAHA,2501320140038,Ms. Anjali Malik,Membership Inference Attack and Defense for Wireless Signal Classifiers with Deep Learning,OK
+40,G-14,ATULYA KUMAR,2501320140039,Ms. Anjali Malik,Membership Inference Attack and Defense for Wireless Signal Classifiers with Deep Learning,OK
+41,G-15,AVINASH KUMAR,25013201400041,Mr. Kapildev Sharma,Mitigating COVID-19 Transmission in Schools With Digital Contact Tracing,OK
+42,G-15,AVINASH YADAV,2501320140042,Mr. Kapildev Sharma,Mitigating COVID-19 Transmission in Schools With Digital Contact Tracing,OK
+43,G-15,AYUSHI JOSHI,2501320140043,Mr. Kapildev Sharma,Mitigating COVID-19 Transmission in Schools With Digital Contact Tracing,OK
+44,G-16,BALAJI THAKUR,2501320140044,Ms. Tanu Kumari,Machine Learning and End-to-end Deep Learning for the Detection of Chronic Heart Failure from Heart Sounds,OK
+45,G-16,DAKSHA KUMARI,2501320140045,Ms. Tanu Kumari,Machine Learning and End-to-end Deep Learning for the Detection of Chronic Heart Failure from Heart Sounds,OK
+46,G-16,DEEKSHA YADAV,2501320140046,Ms. Tanu Kumari,Machine Learning and End-to-end Deep Learning for the Detection of Chronic Heart Failure from Heart Sounds,OK
+47,G-17,DEEP MANI SINGH,2501320140047,Ms. Pankaj Chopra,Earthquake Early Warning (EEW) system; Machine learning; Earthquake Location,OK
+48,G-17,DEEPANSHU SHARMA,2501320140048,Ms. Pankaj Chopra,Earthquake Early Warning (EEW) system; Machine learning; Earthquake Location,OK
+49,G-17,ABHINAV KUMAR,2501320140004,Ms. Pankaj Chopra,Earthquake Early Warning (EEW) system; Machine learning; Earthquake Location,OK
+50,G-18,DEVENDRA KUMAR,2501320140052,Mr. Harender Malik,Detection Of Thyroid Disorders Using Machine Learning Approach,OK
+51,G-18,DHARAMVEER KUMAR,2501320140053,Mr. Harender Malik,Detection Of Thyroid Disorders Using Machine Learning Approach,OK
+52,G-18,DILKHUSH KUMAR,2501320140054,Mr. Harender Malik,Detection Of Thyroid Disorders Using Machine Learning Approach,OK
+53,G-19,DIMPAL,2501320140055,Mr. Raushan Kumar,Car Price Prediction Using Random Forest Regression Machine Learning,OK
+54,G-19,DIPANSHU SHARMA,2501320140056,Mr. Raushan Kumar,Car Price Prediction Using Random Forest Regression Machine Learning,OK
+55,G-19,DIWAN RESHAD KHAN,2501320140057,Mr. Raushan Kumar,Car Price Prediction Using Random Forest Regression Machine Learning,OK

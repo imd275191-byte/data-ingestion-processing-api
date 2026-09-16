@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Processing Logs
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<header class="header">
+
+    <div class="header-icon">
+        📋
+    </div>
+
+    <div>
+
+        <h1>
+            Processing Logs
+        </h1>
+
+        <p>
+            Dataset processing history
+        </p>
+
+    </div>
+
+    <button
+        class="theme-toggle"
+        onclick="toggleTheme()"
+    >
+        🌙 Dark
+    </button>
+
+</header>
+
+
+<section class="card">
+
+
+<div class="card-header">
+
+    <div>
+
+        <h2>
+            Dataset:
+            {{ dataset.filename }}
+        </h2>
+
+        {% if logs %}
+
+            <p>
+                Total Processing Operations:
+                <strong>
+                    {{ logs|length }}
+                </strong>
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% if logs %}
+
+
+<div style="overflow-x:auto;">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Log ID
+                </th>
+
+                <th>
+                    Operation
+                </th>
+
+                <th>
+                    Rows Before
+                </th>
+
+                <th>
+                    Rows After
+                </th>
+
+                <th>
+                    Rows Removed
+                </th>
+
+                <th>
+                    Processed At
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for log in logs %}
+
+                <tr>
+
+                    <td>
+                        {{ log.log_id }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ log.operation }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ log.rows_before }}
+                    </td>
+
+                    <td>
+                        {{ log.rows_after }}
+                    </td>
+
+                    <td>
+                        {{ log.rows_removed }}
+                    </td>
+
+                    <td>
+                        {{ log.processed_at }}
+                    </td>
+
+                    <td>
+
+                        {% if log.status == "Success" %}
+
+                            <strong>
+                                ✅ Success
+                            </strong>
+
+                        {% elif log.status == "Failed" %}
+
+                            <strong>
+                                ❌ Failed
+                            </strong>
+
+                        {% else %}
+
+                            {{ log.status }}
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+{% else %}
+
+
+<div class="no-logs">
+
+    <h3>
+        📋 No Processing Logs
+    </h3>
+
+    <p>
+        No processing operations have been recorded
+        for this dataset yet.
+    </p>
+
+</div>
+
+
+{% endif %}
+
+
+<div class="form-buttons">
+
+    <a
+        href="{{ url_for('home') }}"
+        class="btn btn-secondary"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+
+</section>
+
+
+</div>
+
+
+<script>
+
+function toggleTheme() {
+
+    const dark =
+        document.documentElement
+        .classList
+        .toggle("dark-mode");
+
+    localStorage.setItem(
+        "theme",
+        dark ? "dark" : "light"
+    );
+}
+
+
+if (
+    localStorage.getItem("theme")
+    === "dark"
+) {
+
+    document.documentElement
+        .classList
+        .add("dark-mode");
+
+}
+
+</script>
+
+</body>
+
+</html>

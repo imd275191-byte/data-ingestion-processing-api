@@ -1,0 +1,5 @@
+Flask
+flasgger
+pyodbc
+requests
+gunicorn

@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Data Cleaning</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           GLOBAL PAGE
+        ====================================================== */
+
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100% !important;
+        }
+
+        body {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+            transition:
+                background 0.25s ease,
+                color 0.25s ease;
+        }
+
+        /* =====================================================
+           MAIN CONTAINER
+        ====================================================== */
+
+        .clean-page {
+            width: 100%;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 35px 20px 60px;
+            box-sizing: border-box;
+        }
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        .clean-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .clean-header h1 {
+            margin: 0;
+            color: #f8fafc !important;
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .clean-header p {
+            margin: 10px 0 0;
+            color: #94a3b8 !important;
+            font-size: 16px;
+        }
+
+        .theme-control {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .theme-button {
+            border: 1px solid #334155 !important;
+            border-radius: 10px !important;
+            padding: 10px 18px !important;
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .theme-button:hover {
+            background: #334155 !important;
+            transform: translateY(-2px);
+        }
+
+        /* =====================================================
+           DATASET INFORMATION
+        ====================================================== */
+
+        .clean-card {
+            background: #1e293b !important;
+            color: #e2e8f0 !important;
+            border: 1px solid #334155 !important;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+        }
+
+        .clean-card h2 {
+            margin: 0 0 15px;
+            color: #f8fafc !important;
+            font-size: 21px;
+        }
+
+        .dataset-name {
+            color: #e2e8f0 !important;
+            font-size: 17px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .dataset-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .dataset-meta span {
+            background: #273449 !important;
+            color: #cbd5e1 !important;
+            border: 1px solid #3b4a61 !important;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           SECTION TITLE
+        ====================================================== */
+
+        .section-title {
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            color: #f8fafc !important;
+            font-size: 23px;
+        }
+
+        .section-title p {
+            margin: 5px 0 0;
+            color: #94a3b8 !important;
+        }
+
+        /* =====================================================
+           CLEANING SUMMARY
+        ====================================================== */
+
+        .clean-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .clean-stat {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border: 1px solid #334155 !important;
+            border-radius: 14px;
+            padding: 22px 18px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+            transition: all 0.2s ease;
+        }
+
+        .clean-stat:hover {
+            transform: translateY(-3px);
+            border-color: #475569 !important;
+        }
+
+        .clean-stat-icon {
+            font-size: 29px;
+            margin-bottom: 10px;
+        }
+
+        .clean-stat strong {
+            display: block;
+            color: #f8fafc !important;
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .clean-stat small {
+            display: block;
+            margin-top: 9px;
+            color: #94a3b8 !important;
+        }
+
+        /* =====================================================
+           CLEANING DETAILS
+        ====================================================== */
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .detail-item {
+            background: #273449 !important;
+            border: 1px solid #3b4a61 !important;
+            border-radius: 11px;
+            padding: 15px;
+        }
+
+        .detail-label {
+            display: block;
+            color: #94a3b8 !important;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            color: #f8fafc !important;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           STATUS
+        ====================================================== */
+
+        .clean-status {
+            border-radius: 16px;
+            padding: 28px 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid;
+        }
+
+        .clean-status.success {
+            background: #123524 !important;
+            border-color: #22c55e !important;
+            color: #dcfce7 !important;
+        }
+
+        .clean-status.warning {
+            background: #451f05 !important;
+            border-color: #f59e0b !important;
+            color: #fef3c7 !important;
+        }
+
+        .clean-status.error {
+            background: #450a0a !important;
+            border-color: #ef4444 !important;
+            color: #fee2e2 !important;
+        }
+
+        .status-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .clean-status h2 {
+            margin: 0;
+            color: inherit !important;
+            font-size: 24px;
+        }
+
+        .clean-status p {
+            margin: 9px 0 0;
+            color: inherit !important;
+            opacity: 0.9;
+        }
+
+        /* =====================================================
+           PROCESSED DATASET
+        ====================================================== */
+
+        .processed-file {
+            background: #273449 !important;
+            border: 1px solid #3b4a61 !important;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .processed-file-label {
+            color: #94a3b8 !important;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .processed-file-name {
+            color: #f8fafc !important;
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #334155 !important;
+        }
+
+        .clean-table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+            background: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        .clean-table th,
+        .clean-table td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        .clean-table th {
+            background: #273449 !important;
+            color: #f8fafc !important;
+            font-weight: 600;
+        }
+
+        .clean-table tr:hover td {
+            background: #253247 !important;
+        }
+
+        .quality-ok {
+            color: #86efac !important;
+            font-weight: 700;
+        }
+
+        .quality-warning {
+            color: #fcd34d !important;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           BUTTONS
+        ====================================================== */
+
+        .clean-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .clean-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 11px 17px !important;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .clean-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: #2563eb !important;
+            color: #ffffff !important;
+        }
+
+        .button-success {
+            background: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        .button-secondary {
+            background: #475569 !important;
+            color: #ffffff !important;
+        }
+
+        .button-download {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+        }
+
+        /* =====================================================
+           LIGHT MODE
+        ====================================================== */
+
+        body.light-clean {
+            background: #f1f5f9 !important;
+            color: #172033 !important;
+        }
+
+        body.light-clean .clean-header h1 {
+            color: #172033 !important;
+        }
+
+        body.light-clean .clean-header p {
+            color: #64748b !important;
+        }
+
+        body.light-clean .theme-button {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body.light-clean .clean-card,
+        body.light-clean .clean-stat {
+            background: #ffffff !important;
+            color: #172033 !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+        }
+
+        body.light-clean .clean-card h2,
+        body.light-clean .section-title h2 {
+            color: #172033 !important;
+        }
+
+        body.light-clean .section-title p,
+        body.light-clean .detail-label,
+        body.light-clean .clean-stat small,
+        body.light-clean .processed-file-label {
+            color: #64748b !important;
+        }
+
+        body.light-clean .dataset-name,
+        body.light-clean .detail-value,
+        body.light-clean .clean-stat strong,
+        body.light-clean .processed-file-name {
+            color: #172033 !important;
+        }
+
+        body.light-clean .dataset-meta span,
+        body.light-clean .detail-item,
+        body.light-clean .processed-file {
+            background: #f8fafc !important;
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-clean .table-wrapper {
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-clean .clean-table {
+            background: #ffffff !important;
+        }
+
+        body.light-clean .clean-table th {
+            background: #f8fafc !important;
+            color: #172033 !important;
+        }
+
+        body.light-clean .clean-table td {
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        body.light-clean .clean-table tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 800px) {
+
+            .clean-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .clean-page {
+                padding: 25px 12px 45px;
+            }
+
+            .clean-header h1 {
+                font-size: 27px;
+            }
+
+            .clean-card {
+                padding: 18px;
+            }
+
+            .clean-actions {
+                flex-direction: column;
+            }
+
+            .clean-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="clean-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="clean-header">
+
+        <h1>
+            🧹 Data Cleaning
+        </h1>
+
+        <p>
+            Clean and process your uploaded dataset automatically.
+        </p>
+
+        <div class="theme-control">
+
+            <button
+                type="button"
+                id="themeButton"
+                class="theme-button"
+                onclick="toggleCleanTheme()">
+                ☀️ Light
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         DATASET INFORMATION
+    ====================================================== -->
+
+    <section class="clean-card">
+
+        <h2>
+            📁 Dataset Information
+        </h2>
+
+        <div class="dataset-name">
+            {{ dataset.filename }}
+        </div>
+
+        <div class="dataset-meta">
+
+            <span>
+                File Type:
+                {{ dataset.file_type or dataset.filetype or "Unknown" }}
+            </span>
+
+            <span>
+                File Size:
+                {{ dataset.file_size or dataset.filesize or 0 }}
+                bytes
+            </span>
+
+            <span>
+                Dataset ID:
+                {{ dataset.id }}
+            </span>
+
+            <span>
+                Status:
+                {{ dataset.status or "Validated" }}
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CLEANING SUMMARY
+    ====================================================== -->
+
+    <div class="section-title">
+
+        <h2>
+            📊 Cleaning Summary
+        </h2>
+
+        <p>
+            Summary of the cleaning operation
+        </p>
+
+    </div>
+
+
+    <section class="clean-stats">
+
+
+        <div class="clean-stat">
+
+            <div class="clean-stat-icon">
+                📄
+            </div>
+
+            <strong>
+                {{ original_rows }}
+            </strong>
+
+            <small>
+                Original Rows
+            </small>
+
+        </div>
+
+
+        <div class="clean-stat">
+
+            <div class="clean-stat-icon">
+                ✅
+            </div>
+
+            <strong>
+                {{ cleaned_rows }}
+            </strong>
+
+            <small>
+                Cleaned Rows
+            </small>
+
+        </div>
+
+
+        <div class="clean-stat">
+
+            <div class="clean-stat-icon">
+                🗑️
+            </div>
+
+            <strong>
+                {{ original_rows - cleaned_rows }}
+            </strong>
+
+            <small>
+                Rows Removed
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CLEANING DETAILS
+    ====================================================== -->
+
+    <section class="clean-card">
+
+        <div class="section-title">
+
+            <h2>
+                🔍 Cleaning Details
+            </h2>
+
+            <p>
+                Details of records removed or retained
+            </p>
+
+        </div>
+
+
+        <div class="details-grid">
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Header / Metadata Rows Removed
+                </span>
+
+                <span class="detail-value">
+                    {{ details.get(
+                        "header_metadata_rows_removed", 0
+                    ) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Footer Rows Removed
+                </span>
+
+                <span class="detail-value">
+                    {{ details.get(
+                        "footer_rows_removed", 0
+                    ) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Empty Rows Removed
+                </span>
+
+                <span class="detail-value">
+                    {{ details.get(
+                        "empty_rows_removed", 0
+                    ) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Duplicate Rows Removed
+                </span>
+
+                <span class="detail-value">
+                    {{ details.get(
+                        "duplicate_rows_removed", 0
+                    ) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Remaining Missing Values
+                </span>
+
+                <span class="detail-value">
+                    {{ details.get(
+                        "remaining_missing_values", 0
+                    ) }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CLEANING STATUS
+    ====================================================== -->
+
+    {% set remaining_missing =
+        details.get("remaining_missing_values", 0)
+    %}
+
+
+    {% if remaining_missing > 0 %}
+
+        <section class="clean-status warning">
+
+            <div class="status-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Cleaning Completed With Warnings
+            </h2>
+
+            <p>
+                The dataset was cleaned successfully, but
+                {{ remaining_missing }}
+                missing value(s) remain for review.
+            </p>
+
+        </section>
+
+
+    {% else %}
+
+        <section class="clean-status success">
+
+            <div class="status-icon">
+                ✅
+            </div>
+
+            <h2>
+                Cleaning Completed Successfully
+            </h2>
+
+            <p>
+                The dataset was cleaned successfully and
+                no missing values remain.
+            </p>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         PROCESSED DATASET
+    ====================================================== -->
+
+    <section class="clean-card">
+
+        <div class="section-title">
+
+            <h2>
+                📦 Processed Dataset
+            </h2>
+
+            <p>
+                Your cleaned dataset is ready for download
+                and further validation.
+            </p>
+
+        </div>
+
+
+        <div class="processed-file">
+
+            <div class="processed-file-label">
+                Cleaned File
+            </div>
+
+            <div class="processed-file-name">
+                {{ cleaned_filename }}
+            </div>
+
+        </div>
+
+
+        <div class="clean-actions">
+
+            <a
+                href="{{ url_for(
+                    'download',
+                    filename=cleaned_filename
+                ) }}"
+                class="clean-button button-download">
+
+                ⬇️ Download Cleaned File
+
+            </a>
+
+
+            <a
+                href="{{ url_for(
+                    'validate_cleaned_file',
+                    dataset_id=dataset.id
+                ) }}"
+                class="clean-button button-primary">
+
+                🔎 Validate Cleaned Dataset
+
+            </a>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="clean-button button-secondary">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CLEANED DATA PREVIEW
+    ====================================================== -->
+
+    {% if cleaned_data %}
+
+    <section class="clean-card">
+
+        <div class="section-title">
+
+            <h2>
+                👀 Cleaned Data Preview
+            </h2>
+
+            <p>
+                Preview of the cleaned dataset
+            </p>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="clean-table">
+
+                <thead>
+
+                    <tr>
+
+                        {% for column in cleaned_data[0].keys() %}
+
+                            <th>
+                                {{ column }}
+                            </th>
+
+                        {% endfor %}
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for row in cleaned_data %}
+
+                    <tr>
+
+                        {% for column in cleaned_data[0].keys() %}
+
+                            <td>
+
+                                {% if column ==
+                                      "Data_Quality_Status" %}
+
+                                    {% if row.get(column) ==
+                                          "WARNING" %}
+
+                                        <span class="quality-warning">
+                                            ⚠️ WARNING
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="quality-ok">
+                                            ✅ OK
+                                        </span>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    {{ row.get(column, "") }}
+
+                                {% endif %}
+
+                            </td>
+
+                        {% endfor %}
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =========================================================
+     THEME SCRIPT
+========================================================== -->
+
+<script>
+
+    function applyCleanTheme() {
+
+        const savedTheme =
+            localStorage.getItem("cleanTheme");
+
+        const button =
+            document.getElementById("themeButton");
+
+
+        /*
+         * DARK MODE IS DEFAULT
+         */
+
+        if (savedTheme === "light") {
+
+            document.body.classList.add(
+                "light-clean"
+            );
+
+            if (button) {
+                button.textContent = "🌙 Dark";
+            }
+
+        } else {
+
+            document.body.classList.remove(
+                "light-clean"
+            );
+
+            if (button) {
+                button.textContent = "☀️ Light";
+            }
+
+        }
+
+    }
+
+
+    function toggleCleanTheme() {
+
+        const isLight =
+            document.body.classList.contains(
+                "light-clean"
+            );
+
+
+        if (isLight) {
+
+            localStorage.setItem(
+                "cleanTheme",
+                "dark"
+            );
+
+        } else {
+
+            localStorage.setItem(
+                "cleanTheme",
+                "light"
+            );
+
+        }
+
+
+        applyCleanTheme();
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            applyCleanTheme();
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>

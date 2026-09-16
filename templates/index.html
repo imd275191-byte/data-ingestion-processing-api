@@ -1,0 +1,1095 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Data Ingestion & Processing Management System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     FLASH POPUPS
+===================================================== -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    {% if category == "success" %}
+                        ✅
+                    {% elif category == "error" %}
+                        ❌
+                    {% elif category == "warning" %}
+                        ⚠️
+                    {% else %}
+                        ℹ️
+                    {% endif %}
+
+                    {{ message }}
+
+                    <button
+                        class="flash-close"
+                        onclick="closeFlash(this)"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="header-icon">
+        📊
+    </div>
+
+    <div>
+
+        <h1>
+            Data Ingestion & Processing
+        </h1>
+
+        <p>
+            Upload, profile, validate and clean datasets
+        </p>
+
+    </div>
+
+    <button
+        class="theme-toggle"
+        onclick="toggleTheme()"
+        id="themeButton"
+    >
+        🌙 Dark
+    </button>
+
+</header>
+
+
+<!-- =====================================================
+     DASHBOARD SUMMARY
+===================================================== -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Dashboard Overview
+            </h2>
+
+            <p>
+                Dataset processing activity
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                📁
+            </div>
+
+            <div>
+
+                <h3 data-count="{{ total_datasets }}">
+                    {{ total_datasets }}
+                </h3>
+
+                <p>
+                    Total Datasets
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+                📤
+            </div>
+
+            <div>
+
+                <h3 data-count="{{ processing_summary.total_uploads }}">
+                    {{ processing_summary.total_uploads }}
+                </h3>
+
+                <p>
+                    Uploads
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                🔎
+            </div>
+
+            <div>
+
+                <h3 data-count="{{ processing_summary.profiles }}">
+                    {{ processing_summary.profiles }}
+                </h3>
+
+                <p>
+                    Profiles
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
+                🧹
+            </div>
+
+            <div>
+
+                <h3 data-count="{{ processing_summary.cleanings }}">
+                    {{ processing_summary.cleanings }}
+                </h3>
+
+                <p>
+                    Cleanings
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROCESSING ACTIVITY
+===================================================== -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Processing Activity
+            </h2>
+
+            <p>
+                Number of operations performed
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="chart-grid">
+
+
+        <div class="chart-card">
+
+            <h3>
+                Operations
+            </h3>
+
+            <div class="bar-container">
+
+
+                <div>
+
+                    <div class="bar-label">
+                        <span>Uploads</span>
+                        <strong>
+                            {{ processing_summary.total_uploads }}
+                        </strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:
+                            {% if processing_summary.total_uploads > 0 %}
+                                100%
+                            {% else %}
+                                0%
+                            {% endif %}"
+                        ></div>
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="bar-label">
+                        <span>Profiles</span>
+
+                        <strong>
+                            {{ processing_summary.profiles }}
+                        </strong>
+                    </div>
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            style="width:
+                            {% if processing_summary.total_uploads > 0 %}
+                                {{ (processing_summary.profiles / processing_summary.total_uploads * 100)|round(0) }}%
+                            {% else %}
+                                0%
+                            {% endif %}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="bar-label">
+                        <span>Validations</span>
+
+                        <strong>
+                            {{ processing_summary.validations }}
+                        </strong>
+                    </div>
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            style="width:
+                            {% if processing_summary.total_uploads > 0 %}
+                                {{ (processing_summary.validations / processing_summary.total_uploads * 100)|round(0) }}%
+                            {% else %}
+                                0%
+                            {% endif %}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="bar-label">
+                        <span>Cleanings</span>
+
+                        <strong>
+                            {{ processing_summary.cleanings }}
+                        </strong>
+                    </div>
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            style="width:
+                            {% if processing_summary.total_uploads > 0 %}
+                                {{ (processing_summary.cleanings / processing_summary.total_uploads * 100)|round(0) }}%
+                            {% else %}
+                                0%
+                            {% endif %}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-card">
+
+            <h3>
+                Cleaning Summary
+            </h3>
+
+            <p>
+                Total rows removed:
+
+                <strong>
+                    {{ processing_summary.rows_removed }}
+                </strong>
+            </p>
+
+            <div class="data-engineering-note">
+
+                <strong>
+                    Data Processing Flow
+                </strong>
+
+                <p>
+                    Upload → Profile → Validate → Clean →
+                    Processed File
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     UPLOAD
+===================================================== -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Upload Dataset
+            </h2>
+
+            <p>
+                Upload CSV, Excel or supported data files
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form
+        action="{{ url_for('upload_dataset') }}"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <div class="upload-box">
+
+            <input
+                type="file"
+                name="file"
+                accept=".csv,.xlsx,.xls,.json,.txt,.tsv,.parquet,.xml,.pdf"
+                required
+            >
+
+            <div class="form-buttons">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    📤 Upload Dataset
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- =====================================================
+     DATASET LIST
+===================================================== -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Dataset Management
+            </h2>
+
+            <p>
+                Manage uploaded datasets
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('processed_files') }}"
+            class="btn btn-secondary"
+        >
+            📁 Processed Files
+        </a>
+
+    </div>
+
+
+    <div class="search-filter-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-box"
+            placeholder="🔍 Search dataset..."
+            onkeyup="filterDatasets(); generateDatasetSearchApiLink()"
+        >
+
+        <a
+            href="#"
+            id="datasetSearchApiLink"
+            class="btn btn-secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Search datasets through REST API"
+        >
+            🔗 API Search
+        </a>
+
+        <select
+            id="statusFilter"
+            class="filter-select"
+            onchange="filterDatasets()"
+        >
+
+            <option value="all">
+                All Status
+            </option>
+
+            <option value="uploaded">
+                Uploaded
+            </option>
+
+            <option value="profiled">
+                Profiled
+            </option>
+
+            <option value="validated">
+                Validated
+            </option>
+
+            <option value="cleaned">
+                Cleaned
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div
+        id="datasetList"
+        class="dataset-list"
+    >
+
+
+        {% if datasets %}
+
+            {% for dataset in datasets %}
+
+                <div
+                    class="dataset-card dataset-item"
+                    data-search="{{ dataset.filename|lower }}"
+                    data-status="{{ dataset.status|lower }}"
+                    data-dataset-id="{{ dataset.id }}"
+                >
+
+                    <div class="dataset-header">
+
+                        <div>
+
+                            <h3>
+                                📄 {{ dataset.filename }}
+                            </h3>
+
+                            <p>
+                                Type:
+                                {{ dataset.filetype }}
+                            </p>
+
+                            <p>
+                                Size:
+                                {{ dataset.filesize }} bytes
+                            </p>
+
+                            <p>
+                                Uploaded:
+                                {{ dataset.uploaded_at }}
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            {% set status_class =
+                                dataset.status|lower|replace(" ", "-")
+                            %}
+
+                            <span
+                                class="status-badge status-{{ status_class }}"
+                            >
+                                {{ dataset.status }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dataset-actions">
+
+
+                        <a
+                            href="{{ url_for(
+                                'profile_dataset',
+                                dataset_id=dataset.id
+                            ) }}"
+                            class="btn btn-secondary"
+                        >
+                            📊 Profile
+                        </a>
+
+
+                        <a
+                            href="{{ url_for(
+                                'validate_dataset',
+                                dataset_id=dataset.id
+                            ) }}"
+                            class="btn btn-primary"
+                        >
+                            🔎 Validate
+                        </a>
+
+
+                        <a
+                            href="{{ url_for(
+                                'clean_dataset',
+                                dataset_id=dataset.id
+                            ) }}"
+                            class="btn btn-success"
+                        >
+                            🧹 Clean
+                        </a>
+
+
+                        <a
+                            href="{{ url_for(
+                                'processing_logs',
+                                dataset_id=dataset.id
+                            ) }}"
+                            class="btn btn-secondary"
+                        >
+                            📋 Logs
+                        </a>
+
+
+                        <!-- =================================================
+                             REST API LINK
+                             Link is generated automatically by JavaScript.
+                        ================================================= -->
+
+                        <a
+                            href="#"
+                            class="btn btn-secondary rest-api-link"
+                            data-dataset-id="{{ dataset.id }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Open REST API for this dataset"
+                        >
+                            🔗 REST API
+                        </a>
+
+
+                        <a
+                            href="{{ url_for(
+                                'confirm_delete',
+                                dataset_id=dataset.id
+                            ) }}"
+                            class="btn btn-danger"
+                        >
+                            🗑️ Delete
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>
+                    📂 No Datasets
+                </h3>
+
+                <p>
+                    Upload your first dataset to start processing.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PIPELINE
+===================================================== -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Data Engineering Pipeline
+            </h2>
+
+            <p>
+                Current local practice architecture
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="pipeline">
+
+        <div class="pipeline-step">
+            <div class="number">1</div>
+            Flask
+        </div>
+
+        <div class="pipeline-step">
+            <div class="number">2</div>
+            Upload
+        </div>
+
+        <div class="pipeline-step">
+            <div class="number">3</div>
+            Pandas
+        </div>
+
+        <div class="pipeline-step">
+            <div class="number">4</div>
+            PySpark
+        </div>
+
+        <div class="pipeline-step">
+            <div class="number">5</div>
+            SQL Server
+        </div>
+
+        <div class="pipeline-step">
+            <div class="number">6</div>
+            Power BI
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section class="info-section">
+
+    <h2>
+        About the Project
+    </h2>
+
+    <p>
+        Data Ingestion & Processing Management System is a
+        data engineering project designed to upload,
+        profile, validate, clean and process datasets.
+    </p>
+
+
+    <div class="azure-box">
+
+        <strong>
+            Future Azure Architecture
+        </strong>
+
+        <p>
+            Flask → Azure Blob Storage → Azure Data Factory
+            → Azure Databricks → PySpark → Delta Tables
+            → Azure SQL → Power BI
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <p>
+        Data Ingestion & Processing Management System
+    </p>
+
+    <p>
+        Python + Flask + Pandas + PySpark + SQL Server + Power BI
+    </p>
+
+</footer>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function applyTheme() {
+
+    const savedTheme =
+        localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+
+        document.documentElement.classList.add(
+            "dark-mode"
+        );
+
+        updateThemeButton(true);
+
+    } else {
+
+        document.documentElement.classList.remove(
+            "dark-mode"
+        );
+
+        updateThemeButton(false);
+    }
+}
+
+
+function updateThemeButton(isDark) {
+
+    const button =
+        document.getElementById("themeButton");
+
+    if (!button) return;
+
+    if (isDark) {
+
+        button.innerHTML =
+            "☀️ Light";
+
+    } else {
+
+        button.innerHTML =
+            "🌙 Dark";
+    }
+}
+
+
+function toggleTheme() {
+
+    const isDark =
+        document.documentElement.classList.toggle(
+            "dark-mode"
+        );
+
+    localStorage.setItem(
+        "theme",
+        isDark ? "dark" : "light"
+    );
+
+    updateThemeButton(isDark);
+}
+
+
+/* =====================================================
+   FLASH
+===================================================== */
+
+function closeFlash(button) {
+
+    const message =
+        button.parentElement;
+
+    message.classList.add(
+        "popup-hide"
+    );
+
+    setTimeout(
+        () => message.remove(),
+        300
+    );
+}
+
+
+setTimeout(() => {
+
+    document
+        .querySelectorAll(".flash-message")
+        .forEach(message => {
+
+            message.classList.add(
+                "popup-hide"
+            );
+
+            setTimeout(
+                () => message.remove(),
+                300
+            );
+
+        });
+
+}, 5000);
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function filterDatasets() {
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const status =
+        document
+        .getElementById("statusFilter")
+        .value
+        .toLowerCase();
+
+    const items =
+        document.querySelectorAll(
+            ".dataset-item"
+        );
+
+    items.forEach(item => {
+
+        const text =
+            item
+            .dataset
+            .search;
+
+        const itemStatus =
+            item
+            .dataset
+            .status;
+
+        const matchesSearch =
+            text.includes(search);
+
+        const matchesStatus =
+            status === "all"
+            || itemStatus === status;
+
+        item.style.display =
+            matchesSearch && matchesStatus
+            ? ""
+            : "none";
+
+    });
+}
+
+
+/* =====================================================
+   DATASET SEARCH REST API LINK
+===================================================== */
+
+function generateDatasetSearchApiLink() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const apiLink =
+        document.getElementById("datasetSearchApiLink");
+
+    if (!searchInput || !apiLink) {
+        return;
+    }
+
+    const searchValue =
+        searchInput.value.trim();
+
+    const apiBaseUrl =
+        `${window.location.protocol}//${window.location.hostname}:5051`;
+
+    const apiUrl =
+        `${apiBaseUrl}/api/datasets/search?filename=${encodeURIComponent(searchValue)}`;
+
+    apiLink.href = apiUrl;
+    apiLink.title =
+        `Search datasets through REST API: ${apiUrl}`;
+}
+
+
+/* =====================================================
+   REST API LINK GENERATION
+===================================================== */
+
+/*
+    This function automatically creates the REST API
+    URL for every dataset.
+
+    Example:
+
+    Dataset ID = 3004
+
+    Generated URL:
+
+    http://127.0.0.1:5051/api/datasets/3004/processed-files
+*/
+
+function generateRestApiLinks() {
+
+    const apiPort = 5051;
+
+    const apiBaseUrl =
+        `${window.location.protocol}//${window.location.hostname}:${apiPort}`;
+
+    const restApiLinks =
+        document.querySelectorAll(
+            ".rest-api-link"
+        );
+
+
+    restApiLinks.forEach(link => {
+
+        const datasetId =
+            link.dataset.datasetId;
+
+
+        if (!datasetId) {
+            return;
+        }
+
+
+        const apiUrl =
+            `${apiBaseUrl}/api/datasets/${datasetId}/processed-files`;
+
+
+        /*
+            The actual REST API URL is generated here.
+        */
+
+        link.href = apiUrl;
+
+
+        /*
+            Optional tooltip showing the generated URL.
+        */
+
+        link.title =
+            `Open REST API: ${apiUrl}`;
+
+
+        /*
+            Store generated URL so other JavaScript
+            code can access it if needed later.
+        */
+
+        link.dataset.apiUrl =
+            apiUrl;
+
+    });
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+applyTheme();
+
+generateDatasetSearchApiLink();
+
+generateRestApiLinks();
+
+</script>
+
+</body>
+
+</html>
