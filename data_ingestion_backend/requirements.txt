@@ -1,7 +1,6 @@
 Flask
-flask-cors
 flasgger
 pyodbc
 requests
 gunicorn
-python-dotenv
+Flask-Cors==6.0.5
