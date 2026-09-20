@@ -9,12 +9,13 @@ app = Flask(__name__)
 CORS(
     app,
     resources={
-        r"/api/*": {
+        r"/*": {
             "origins": "https://data-ingestion-processing-api.vercel.app"
         }
     },
     allow_headers=["Content-Type", "X-API-Key"],
-    methods=["GET", "POST", "OPTIONS"]
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    expose_headers=["Content-Type"]
 )
 
 # ============================================================
