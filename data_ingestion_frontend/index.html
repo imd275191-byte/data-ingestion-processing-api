@@ -1,0 +1,1642 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DataFlow | Data Ingestion & Processing</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-logo">
+                <div class="brand-icon">DF</div>
+
+                <div class="brand-text">
+                    <h2>DataFlow</h2>
+                    <span>REST API SYSTEM</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <div class="menu-label">MAIN MENU</div>
+
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <span class="nav-icon">&#8962;</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#ingestionSection" class="nav-link" data-section="ingestionSection">
+                <span class="nav-icon">&#8595;</span>
+                <span>Data Ingestion</span>
+            </a>
+
+            <a href="#batchSection" class="nav-link" data-section="batchSection">
+                <span class="nav-icon">&#9646;</span>
+                <span>Batch Ingestion</span>
+            </a>
+
+            <a href="#fileCleaningSection" class="nav-link" data-section="fileCleaningSection">
+                <span class="nav-icon">&#8593;</span>
+                <span>File Cleaning</span>
+            </a>
+
+            <div class="menu-label menu-label-space">PROCESSING</div>
+
+            <a href="#etlSection" class="nav-link" data-section="etlSection">
+                <span class="nav-icon">&#9881;</span>
+                <span>ETL Processing</span>
+            </a>
+
+            <a href="#processedSection" class="nav-link" data-section="processedSection">
+                <span class="nav-icon">&#10003;</span>
+                <span>Processed Data</span>
+            </a>
+
+            <div class="menu-label menu-label-space">MONITORING</div>
+
+            <a href="#logsSection" class="nav-link" data-section="logsSection">
+                <span class="nav-icon">&#8801;</span>
+                <span>API Logs</span>
+            </a>
+
+        </div>
+
+        <div class="sidebar-footer">
+
+            <div class="connection-box">
+                <span class="connection-dot"></span>
+
+                <div>
+                    <strong>API Connected</strong>
+                    <small>127.0.0.1:5000</small>
+                </div>
+            </div>
+
+            <div class="sidebar-version">
+                DataFlow v1.0
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="mobile-menu" type="button">
+                    Ã¢ËœÂ°
+                </button>
+
+                <div>
+                    <div class="topbar-title">
+                        Data Management
+                    </div>
+
+                    <div class="topbar-subtitle">
+                        REST API & Data Processing Platform
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="api-live">
+                    <span class="live-dot"></span>
+
+                    <div>
+                        <strong id="apiStatusText">API Online</strong>
+                        <small>Backend connection</small>
+                    </div>
+                </div>
+
+                <button
+                    id="refreshBtn"
+                    class="icon-button"
+                    type="button"
+                    title="Refresh Dashboard">
+                    &#8635;
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+
+
+        <!-- =================================================
+             DASHBOARD
+             ================================================= -->
+
+        <section id="dashboard" class="dashboard-section">
+
+            <div class="welcome-row">
+
+                <div>
+
+                    <div class="breadcrumb">
+                        Dashboard / Overview
+                    </div>
+
+                    <h1>Data Ingestion Dashboard</h1>
+
+                    <p>
+                        Manage, process and monitor your data from one place.
+                    </p>
+
+                </div>
+
+                <div class="dashboard-date">
+                    <span class="online-indicator"></span>
+                    System Ready
+                </div>
+
+            </div>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+                        <div class="stat-icon blue">
+                            DB
+                        </div>
+
+                        <span class="stat-status">
+                                Source
+                            </span>
+                    </div>
+
+                    <div class="stat-label">
+                        Source Records
+                    </div>
+
+                    <div
+                            id="sourceRecordsCount"
+                            class="stat-value">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Records available for processing
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+                        <div class="stat-icon green">
+                            &#10003;
+                        </div>
+
+                        <span class="stat-status green-text">
+                                Output
+                            </span>
+                    </div>
+
+                    <div class="stat-label">
+                        Processed Records
+                    </div>
+
+                    <div
+                            id="processedRecordsCount"
+                            class="stat-value">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Successfully processed records
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+                        <div class="stat-icon purple">
+                            ETL
+                        </div>
+
+                        <span class="stat-status purple-text">
+                                Latest
+                            </span>
+                    </div>
+
+                    <div class="stat-label">
+                        Newly Processed
+                    </div>
+
+                    <div
+                            id="newProcessedCount"
+                            class="stat-value">
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Records processed in latest ETL
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+                        <div class="stat-icon orange">
+                            API
+                        </div>
+
+                        <span class="stat-status green-text">
+                                Active
+                            </span>
+                    </div>
+
+                    <div class="stat-label">
+                        API Status
+                    </div>
+
+                    <div class="stat-value stat-online">
+                        Online
+                    </div>
+
+                    <div class="stat-description">
+                        Backend connection status
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Quick Actions</h2>
+                    <p>Perform common data operations</p>
+                </div>
+
+            </div>
+
+
+            <div class="action-grid">
+
+                <a
+                        href="#ingestionSection"
+                        class="action-card action-blue">
+
+                    <div class="action-card-header">
+
+                        <div class="action-icon">
+                            &#8595;
+                        </div>
+
+                        <span class="action-arrow">
+                                &#8594;
+                            </span>
+
+                    </div>
+
+                    <h3>Ingest Data</h3>
+
+                    <p>
+                        Add a new data record
+                    </p>
+
+                </a>
+
+
+                <a
+                        href="#batchSection"
+                        class="action-card action-green">
+
+                    <div class="action-card-header">
+
+                        <div class="action-icon">
+                            &#9646;
+                        </div>
+
+                        <span class="action-arrow">
+                                &#8594;
+                            </span>
+
+                    </div>
+
+                    <h3>Batch Ingestion</h3>
+
+                    <p>
+                        Add multiple records
+                    </p>
+
+                </a>
+
+
+                <a
+                        href="#fileCleaningSection"
+                        class="action-card action-purple">
+
+                    <div class="action-card-header">
+
+                        <div class="action-icon">
+                            &#8593;
+                        </div>
+
+                        <span class="action-arrow">
+                                &#8594;
+                            </span>
+
+                    </div>
+
+                    <h3>Clean File</h3>
+
+                    <p>
+                        Upload and clean data files
+                    </p>
+
+                </a>
+
+
+                <a
+                        href="#etlSection"
+                        class="action-card action-orange">
+
+                    <div class="action-card-header">
+
+                        <div class="action-icon">
+                            &#9881;
+                        </div>
+
+                        <span class="action-arrow">
+                                &#8594;
+                            </span>
+
+                    </div>
+
+                    <h3>Run ETL</h3>
+
+                    <p>
+                        Process source data
+                    </p>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DATA INGESTION
+             ================================================= -->
+
+        <section
+                id="ingestionSection"
+                class="content-section">
+
+            <div class="section-card">
+
+                <div class="section-header">
+
+                    <div class="section-title-icon blue-bg">
+                        &#8595;
+                    </div>
+
+                    <div>
+                        <h2>Data Ingestion</h2>
+
+                        <p>
+                            Add a single record to the source database
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <form
+                            id="ingestionForm"
+                            class="modern-form">
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Name
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="name"
+                                    placeholder="Enter name"
+                                    required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email
+                            </label>
+
+                            <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="Enter email"
+                                    required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="age">
+                                Age
+                            </label>
+
+                            <input
+                                    type="number"
+                                    id="age"
+                                    placeholder="Enter age">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="city">
+                                City
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="city"
+                                    placeholder="Enter city">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="salary">
+                                Salary
+                            </label>
+
+                            <input
+                                    type="number"
+                                    id="salary"
+                                    placeholder="Enter salary">
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button
+                                    id="ingestBtn"
+                                    type="submit"
+                                    class="btn btn-primary">
+                                Add Record
+                            </button>
+
+                            <button
+                                    type="reset"
+                                    class="btn btn-light">
+                                Clear
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <div
+                            id="ingestionResponse"
+                            class="response-box hidden">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             BATCH INGESTION
+             ================================================= -->
+
+        <section
+                id="batchSection"
+                class="content-section">
+
+            <div class="section-card">
+
+                <div class="section-header">
+
+                    <div class="section-title-icon green-bg">
+                        &#9646;
+                    </div>
+
+                    <div>
+                        <h2>Batch Ingestion</h2>
+
+                        <p>
+                            Add multiple records in one API request
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <div id="batchRecords">
+
+                        <div class="batch-record">
+
+                            <div class="batch-record-top">
+
+                                <div class="record-number">
+
+                                    <span>01</span>
+
+                                    <strong>
+                                        Record 1
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="batch-fields">
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Name
+                                    </label>
+
+                                    <input
+                                            type="text"
+                                            class="batch-name"
+                                            placeholder="Name">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Email
+                                    </label>
+
+                                    <input
+                                            type="email"
+                                            class="batch-email"
+                                            placeholder="Email">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Age
+                                    </label>
+
+                                    <input
+                                            type="number"
+                                            class="batch-age"
+                                            placeholder="Age">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        City
+                                    </label>
+
+                                    <input
+                                            type="text"
+                                            class="batch-city"
+                                            placeholder="City">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Salary
+                                    </label>
+
+                                    <input
+                                            type="number"
+                                            class="batch-salary"
+                                            placeholder="Salary">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="batch-bottom-actions">
+
+                        <button
+                                id="addBatchBtn"
+                                type="button"
+                                class="btn btn-outline">
+                            + Add Another Record
+                        </button>
+
+
+                        <button
+                                id="batchIngestBtn"
+                                type="button"
+                                class="btn btn-primary">
+                            Submit Batch
+                        </button>
+
+                    </div>
+
+
+                    <div
+                            id="batchResponse"
+                            class="response-box hidden">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FILE CLEANING
+             ================================================= -->
+
+        <section
+                id="fileCleaningSection"
+                class="content-section">
+
+            <div class="section-card">
+
+                <div class="section-header">
+
+                    <div class="section-title-icon purple-bg">
+                        &#8593;
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            File Cleaning & Processing
+                        </h2>
+
+                        <p>
+                            Upload CSV, Excel, PDF or TXT files and generate
+                            a cleaned Excel file.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section-body">
+
+
+                    <!-- SUPPORTED FILE TYPES -->
+
+                    <div class="supported-file-box">
+
+                        <div class="supported-file-title">
+                            Supported File Formats
+                        </div>
+
+                        <div class="supported-file-list">
+
+                                <span class="file-type-badge csv-badge">
+                                    CSV
+                                </span>
+
+                            <span class="file-type-badge excel-badge">
+                                    Excel
+                                </span>
+
+                            <span class="file-type-badge pdf-badge">
+                                    PDF
+                                </span>
+
+                            <span class="file-type-badge txt-badge">
+                                    TXT
+                                </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- UPLOAD AREA -->
+
+                    <div class="upload-area">
+
+                        <div class="upload-circle">
+                            &#8593;
+                        </div>
+
+                        <h3>
+                            Upload Data File
+                        </h3>
+
+                        <p>
+                            Select a CSV, Excel, PDF or TXT file to clean
+                            and process.
+                        </p>
+
+
+                        <!--
+                            IMPORTANT:
+                            Using a label connected directly to the
+                            file input. This opens the browser's native
+                            file picker without JavaScript click().
+                        -->
+
+                        <label
+                                for="cleanFile"
+                                class="file-select-btn">
+                            Choose File
+                        </label>
+
+
+                        <input
+                                type="file"
+                                id="cleanFile"
+                                name="cleanFile"
+                                accept=".csv,.xlsx,.xls,.pdf,.txt"
+                                style="
+                                    display: block;
+                                    width: 100%;
+                                    max-width: 420px;
+                                    margin: 14px auto 0;
+                                    padding: 8px;
+                                    box-sizing: border-box;
+                                    border: 1px solid #dbe1e8;
+                                    border-radius: 8px;
+                                    background: #ffffff;
+                                    color: #475569;
+                                    font-family: inherit;
+                                    font-size: 13px;
+                                    cursor: pointer;
+                                ">
+
+
+                        <div
+                                id="selectedCleanFileName"
+                                class="selected-file">
+                            No file selected
+                        </div>
+
+                    </div>
+
+
+                    <!-- UPLOAD ACTION -->
+
+                    <div class="upload-actions">
+
+                        <button
+                                id="cleanFileBtn"
+                                type="button"
+                                class="btn btn-primary">
+                            Clean & Process File
+                        </button>
+
+                    </div>
+
+
+                    <!-- CLEANING STATUS -->
+
+                    <div
+                            id="cleanFileResponse"
+                            class="response-box hidden">
+                    </div>
+
+
+                    <!-- CLEANING REPORT -->
+
+                    <div
+                            id="cleaningReport"
+                            class="cleaning-report hidden">
+
+                        <div class="cleaning-report-header">
+
+                            <div>
+
+                                <h3>
+                                    Cleaning Report
+                                </h3>
+
+                                <p>
+                                    Data quality results
+                                </p>
+
+                            </div>
+
+                            <div
+                                    id="cleanedFileType"
+                                    class="file-type-result">
+                            </div>
+
+                        </div>
+
+
+                        <div class="cleaning-stats-grid">
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Original Rows
+                                    </span>
+
+                                <strong id="originalRows">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Final Rows
+                                    </span>
+
+                                <strong id="finalRows">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Rows Removed
+                                    </span>
+
+                                <strong id="rowsRemoved">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Duplicate Rows
+                                    </span>
+
+                                <strong id="duplicateRowsRemoved">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Invalid Emails
+                                    </span>
+
+                                <strong id="invalidEmailsFound">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="cleaning-stat">
+
+                                    <span>
+                                        Missing Values
+                                    </span>
+
+                                <strong id="missingValuesRemaining">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+<!-- CLEANED DATA PREVIEW -->
+
+<div class="cleaned-preview-area">
+
+    <div class="cleaned-preview-header">
+        <div>
+            <h3>Cleaned Data Preview</h3>
+            <p>Final cleaned records</p>
+        </div>
+
+        <span id="cleanedPreviewCount">
+            0 records
+        </span>
+    </div>
+
+    <div class="table-wrapper">
+
+        <table class="data-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>City</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+
+            <tbody id="cleanedPreviewTableBody">
+
+                <tr>
+                    <td colspan="6" class="empty-table">
+                        Clean a file to view cleaned data.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+                        <!-- DOWNLOAD -->
+
+                        <div class="cleaned-download-area">
+
+                            <div class="download-file-info">
+
+                                <div class="download-icon">
+                                    &#8595;
+                                </div>
+
+                                <div>
+
+                                    <strong id="cleanedFileName">
+                                        Cleaned file
+                                    </strong>
+
+                                    <span>
+                                            Cleaned Excel file generated successfully
+                                        </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                    id="downloadCleanedBtn"
+                                    type="button"
+                                    class="btn btn-success">
+                                Download Cleaned File
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ETL PROCESSING
+             ================================================= -->
+
+        <section
+                id="etlSection"
+                class="content-section">
+
+            <div class="etl-panel">
+
+                <div class="etl-header">
+
+                    <div class="section-title-icon orange-bg">
+                        &#9881;
+                    </div>
+
+                    <div>
+
+                        <div class="eyebrow">
+                            ETL PIPELINE
+                        </div>
+
+                        <h2>
+                            Process Source Data
+                        </h2>
+
+                        <p>
+                            Validate, transform and store source records
+                            into the processed data layer.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="etl-action-area">
+
+                    <div class="etl-info">
+
+                        <div class="etl-step">
+                            <span>01</span>
+                            Extract
+                        </div>
+
+                        <div class="etl-line"></div>
+
+                        <div class="etl-step">
+                            <span>02</span>
+                            Transform
+                        </div>
+
+                        <div class="etl-line"></div>
+
+                        <div class="etl-step">
+                            <span>03</span>
+                            Load
+                        </div>
+
+                    </div>
+
+
+                    <button
+                            id="processEtlBtn"
+                            type="button"
+                            class="btn btn-etl">
+                        Run ETL Processing
+                        <span>&#8594;</span>
+                    </button>
+
+                </div>
+
+
+                <div
+                        id="etlResult"
+                        class="response-box hidden">
+                </div>
+
+
+                <div
+                        id="etlSummary"
+                        class="etl-summary-card hidden">
+
+                    <div class="etl-summary-item">
+
+                            <span>
+                                Source Records
+                            </span>
+
+                        <strong id="etlSourceRecords">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="etl-summary-item">
+
+                            <span>
+                                Newly Processed
+                            </span>
+
+                        <strong id="etlProcessedInserted">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="etl-summary-item">
+
+                            <span>
+                                Already Processed
+                            </span>
+
+                        <strong id="etlAlreadyProcessed">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PROCESSED DATA
+             ================================================= -->
+
+        <!-- =================================================
+ SOURCE DATA
+ ================================================= -->
+
+        <section id="sourceSection" class="content-section">
+
+            <div class="section-card">
+
+                <div class="section-header section-header-with-action">
+
+                    <div class="section-header-left">
+
+                        <div class="section-title-icon blue-bg">
+                            DB
+                        </div>
+
+                        <div>
+                            <h2>Source Data</h2>
+                            <p>View records stored in the source database</p>
+                        </div>
+
+                    </div>
+
+                    <button
+                            id="refreshSourceBtn"
+                            type="button"
+                            class="btn btn-light">
+                        &#8635; Refresh
+                    </button>
+
+                </div>
+
+                <div class="section-body">
+
+                    <div
+                            id="sourceDataCount"
+                            class="table-count">
+                        0 records
+                    </div>
+
+                    <div class="table-container">
+
+                        <table
+                                class="data-table"
+                                id="sourceTable">
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Age</th>
+                                <th>City</th>
+                                <th>Salary</th>
+                                <th>Created At</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="sourceTableBody">
+
+                            <tr>
+                                <td colspan="7" class="empty-table">
+                                    Loading source records...
+                                </td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="pagination">
+
+                        <div
+                                id="sourcePageInfo"
+                                class="pagination-info">
+                            Page 1
+                        </div>
+
+                        <div class="pagination-buttons">
+
+                            <button
+                                    id="sourcePrevBtn"
+                                    type="button"
+                                    class="page-btn">
+                                &#8592; Previous
+                            </button>
+
+                            <button
+                                    id="sourceNextBtn"
+                                    type="button"
+                                    class="page-btn">
+                                Next &#8594;
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section
+                id="processedSection"
+                class="content-section">
+
+            <div class="section-card">
+
+                <div class="section-header section-header-with-action">
+
+                    <div class="section-header-left">
+
+                        <div class="section-title-icon blue-bg">
+                            &#10003;
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Processed Data
+                            </h2>
+
+                            <p>
+                                View transformed records from the ETL pipeline
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                            id="refreshProcessedBtn"
+                            type="button"
+                            class="btn btn-light">
+                        &#8635; Refresh
+                    </button>
+
+                </div>
+
+
+                <div class="section-body">
+                    <div class="table-search">
+
+                        <span>&#8981;</span>
+
+                        <input
+                                type="text"
+                                id="processedSearch"
+                                placeholder="Search processed data...">
+
+                    </div>
+
+                    <div class="processed-filters">
+
+                        <select id="processedCityFilter">
+                            <option value="">All Cities</option>
+                            <option value="Noida">Noida</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Greater Noida">Greater Noida</option>
+                            <option value="Mumbai">Mumbai</option>
+                        </select>
+
+                        <select id="processedCategoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+
+                        <button
+                                id="processedFilterBtn"
+                                type="button"
+                                class="btn btn-primary">
+                            Apply Filter
+                        </button>
+
+                    </div>
+
+
+
+
+                    <div
+                            id="processedDataCount"
+                            class="table-count">
+                        0 records
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table
+                            class="data-table"
+                            id="processedTable">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Source ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                            <th>City</th>
+                            <th>Salary</th>
+                            <th>Category</th>
+                            <th>Processed At</th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="processedTableBody">
+
+                        <tr>
+
+                            <td
+                                    colspan="9"
+                                    class="empty-table">
+                                No processed records found.
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="pagination">
+
+                    <div
+                            id="processedPageInfo"
+                            class="pagination-info">
+                        Page 1
+                    </div>
+
+
+                    <div class="pagination-buttons">
+
+                        <button
+                                id="processedPrevBtn"
+                                type="button"
+                                class="page-btn">
+                            Ã¢â€ Â Previous
+                        </button>
+
+                        <button
+                                id="processedNextBtn"
+                                type="button"
+                                class="page-btn">
+                            Next &#8594;
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+    
+
+
+            <!-- =================================================
+                 API LOGS
+                 ================================================= -->
+
+            <section
+                id="logsSection"
+                class="content-section">
+
+                <div class="section-card">
+
+                    <div class="section-header section-header-with-action">
+
+                        <div class="section-header-left">
+
+                            <div class="section-title-icon dark-bg">
+                                &#8801;
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    API Logs
+                                </h2>
+
+                                <p>
+                                    Monitor API requests and responses
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            id="refreshLogsBtn"
+                            type="button"
+                            class="btn btn-light">
+                            &#8635; Refresh
+                        </button>
+
+                    </div>
+
+
+                    <div class="section-body">
+
+                        <div class="logs-container">
+
+                            <table
+                                class="logs-table"
+                                id="logsTable">
+
+                                <thead>
+
+                                <tr>
+
+                                    <th>ID</th>
+                                    <th>Endpoint</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                    <th>Message</th>
+                                    <th>Created At</th>
+
+                                </tr>
+
+                                </thead>
+
+
+                                <tbody id="logsTableBody">
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="empty-table">
+                                        Loading API logs...
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SYSTEM HEALTH
+                 ================================================= -->
+
+            <section class="health-section">
+
+                <div class="health-card">
+
+                    <div class="health-header">
+
+                        <div class="health-icon">
+                            &#9829;
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                System Health
+                            </h3>
+
+                            <p>
+                                Current backend API health information
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="healthResult"
+                        class="health-result">
+                        Checking API health...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            <div>
+                <strong>DataFlow</strong>
+                &nbsp;Ã¢â‚¬Â¢&nbsp;
+                Data Ingestion & Processing REST API
+            </div>
+
+            <span>
+                Local Development Environment
+            </span>
+
+            <div
+                id="lastUpdated"
+                class="last-updated">
+            </div>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="js/app.js?v=20260920_fix4"></script>
+
+</body>
+</html>
+
+
+
+

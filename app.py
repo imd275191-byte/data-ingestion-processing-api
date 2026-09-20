@@ -34,7 +34,7 @@ SERVER = r"DESKTOP-CIRBMT0\MRSQL2025"
 DATABASE = "DataIngestionDB"
 DRIVER = "{ODBC Driver 18 for SQL Server}"
 
-API_KEY = "my-secret-key"
+API_KEY = "demo-api-key"
 
 
 # ============================================================

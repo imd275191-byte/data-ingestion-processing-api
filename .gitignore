@@ -1,25 +1,33 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+
+# Environment / secrets
 .env
+
+# IDE / editor
 .vscode/
 .idea/
 .vs/
-processed/
-uploads/
 
-.vs/
+# Generated / runtime files
 processed/
 uploads/
+cleaned_files/
 
-.vs/
-processed/
-uploads/
+# Database files
+*.db
 
-.vs/
-processed/
-uploads/
+# Temporary files
+*.tmp
+*.log
 
-.vs/
-processed/
-uploads/
+# Secrets / credentials
+postgresqldata_ingestion_db_*.txt
+stskey-auth-*.txt
+
+# Frontend backup files
+data_ingestion_frontend/js/*_backup.js
+data_ingestion_frontend/js/*_before_*.js

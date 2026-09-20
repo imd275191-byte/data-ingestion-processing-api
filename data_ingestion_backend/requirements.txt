@@ -1,0 +1,7 @@
+Flask
+flask-cors
+flasgger
+pyodbc
+requests
+gunicorn
+python-dotenv
