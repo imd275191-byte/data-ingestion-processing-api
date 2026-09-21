@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+﻿from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flasgger import Swagger
 
@@ -10,7 +10,7 @@ CORS(
     app,
     resources={
         r"/*": {
-            "origins": "https://data-ingestion-processing-api.vercel.app"
+            "origins": ["http://127.0.0.1:5500", "http://localhost:5500", "https://data-ingestion-processing-api.vercel.app"]
         }
     },
     allow_headers=["Content-Type", "X-API-Key"],

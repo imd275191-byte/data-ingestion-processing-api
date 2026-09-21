@@ -1,9 +1,9 @@
-/* ============================================================
+﻿/* ============================================================
    DATAFLOW - FRONTEND APPLICATION
    Data Ingestion & Processing REST API
    ============================================================ */
 
-const API_BASE_URL = "https://data-ingestion-processing-api.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:5000";
 const API_KEY = "demo-api-key";
 
 let processedCurrentPage = 1;
@@ -1635,7 +1635,7 @@ async function runEtlProcessing() {
 
         button.disabled = true;
         button.innerHTML =
-            "Processing... <span>→</span>";
+            "Processing... <span>â†’</span>";
 
         const response =
             await fetch(
@@ -1731,7 +1731,7 @@ async function runEtlProcessing() {
         button.disabled = false;
 
         button.innerHTML =
-            "Run ETL Processing <span>→</span>";
+            "Run ETL Processing <span>â†’</span>";
     }
 }
 
@@ -2395,3 +2395,5 @@ document.addEventListener(
         loadSourceRecords();
     }
 );
+
+
