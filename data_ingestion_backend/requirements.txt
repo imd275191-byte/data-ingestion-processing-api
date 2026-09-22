@@ -4,4 +4,5 @@ pyodbc
 requests
 gunicorn
 Flask-Cors==6.0.5
-python-dotenvpandas
+python-dotenv
+pandas
