@@ -1,6 +1,5 @@
 import csv
 import os
-from dotenv import load_dotenv
 import pandas as pd
 from functools import wraps
 
@@ -11,7 +10,6 @@ from database import get_connection
 
 
 api_bp = Blueprint("api", __name__)
-load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 
