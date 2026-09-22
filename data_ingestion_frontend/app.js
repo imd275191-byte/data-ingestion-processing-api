@@ -4,7 +4,7 @@
    Data Ingestion & Processing REST API
    ============================================================ */
 
-const API_BASE_URL = "http://127.0.0.1:5000";
+const API_BASE_URL = "https://data-ingestion-processing-api.onrender.com";
 const API_KEY = "demo-api-key";
 
 let processedCurrentPage = 1;
