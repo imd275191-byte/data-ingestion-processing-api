@@ -15,4 +15,11 @@ def get_connection():
         "DB_CONNECTION_STRING",
         DEFAULT_CONNECTION_STRING
     )
-    return pyodbc.connect(connection_string, timeout=10)
+
+    try:
+        connection = pyodbc.connect(connection_string, timeout=10)
+        print("DATABASE CONNECTION: SUCCESS")
+        return connection
+    except Exception as e:
+        print("DATABASE CONNECTION ERROR:", repr(e))
+        raise
